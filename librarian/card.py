@@ -19,8 +19,8 @@ class Card(object):
         savestring = str(card)
         loaded = Card(*eval(savestring))
     """
-    def __init__(self, code = None, name = None, abilities = None, attributes = None,
-        info = None):
+    def __init__(self, code = None, name = None, abilities = None, 
+                 attributes = None, info = None):
         self.code = 0 if code is None else code
         self.name = '' if name is None else name
         self.abilities = {} if abilities is None else abilities
@@ -38,7 +38,7 @@ class Card(object):
         return '<Card:{0}>'.format(str(self.code))
 
     def is_valid(self):
-        return self.id > 0 and name >= ''
+        return self.code > 0 and self.name >= ''
 
     def has_attribute(self, attribute):
         return attribute in self.attributes
