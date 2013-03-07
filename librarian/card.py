@@ -4,7 +4,7 @@ __email__ = 'nekroze@eturnilnetwork.com'
 
 
 class Card(object):
-    """The card stores general information about the card.::
+    """The card stores general information about the card.
      - code: the unique identifier for this card.
      - name: name of this card to be displayed.
      - abilities: dict of phase id's containing a list of action descriptors.
@@ -13,13 +13,13 @@ class Card(object):
 
     Card can be saved to, and loaded from, a string. Call `str()` on a Card
     instance or `.save_string()` on the instance. This will return a string that
-    when evaluated using `eval()` can be unpacked into the Card constructor to
+    when evaluated using `eval()` can be unpacked into the Card constructor
     re-create that card. For example::
         original = Card(1, 'cool card')
         savestring = str(card)
         loaded = Card(*eval(savestring))
     """
-    def __init__(self, code = None, name = None, abilities = None, 
+    def __init__(self, code = None, name = None, abilities = None,
                  attributes = None, info = None):
         self.code = 0 if code is None else code
         self.name = '' if name is None else name
@@ -38,7 +38,7 @@ class Card(object):
         return '<Card:{0}>'.format(str(self.code))
 
     def is_valid(self):
-        return self.code > 0 and self.name >= ''
+        return self.code > 0 and self.name > ''
 
     def has_attribute(self, attribute):
         return attribute in self.attributes
