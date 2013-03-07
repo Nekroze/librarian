@@ -1,0 +1,45 @@
+
+*.py[cod]
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+dist
+_build
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+__pycache__
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+
+# Translations
+*.mo
+
+# Mr Developer
+*.e4p
+*.e5p
+.eric4project
+.eric5project
+.ropeproject
+*.nja
+*.eproject
+.mr.developer.cfg
+.project
+.pydevproject
