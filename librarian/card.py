@@ -28,6 +28,9 @@ class Card(object):
         self.info = {} if info is None else info
 
     def save_string(self):
+        """Converts the Card as is into a string capable of constructing a new
+        Card identical to this one.
+        """
         return str((self.code, self.name, self.abilities, self.attributes,
         self.info))
 
@@ -38,13 +41,45 @@ class Card(object):
         return '<Card:{0}>'.format(str(self.code))
 
     def is_valid(self):
-        return self.code > 0 and self.name > ''
+        """Returns True if code is not 0 and self.name is not ''."""
+        return self.code != 0 and self.name != ''
 
     def has_attribute(self, attribute):
+        """Return true if this card contains the given attribute."""
         return attribute in self.attributes
 
+    def add_attribute(self, attribute):
+        """Add the given attribute to this Card. Returns the length of
+        attributes after addition.
+        """
+        self.attributes.append(attribute)
+        return len(self.attributes)
+
     def get_abilities(self, phase):
+        """Returns an ability list for the given phase ID."""
         return self.abilities[phase]
 
+    def add_ability(self, phase, ability):
+        """Add the given ability to this Card under the given phase. Returns the
+        length of the abilities for the given phase after the addition.
+        """
+        if phase not in self.abilities:
+            self.abilities[phase] = []
+        self.abilities[phase].append(ability)
+        return len(self.abilities[phase])
+
     def get_info(self, key):
+        """Return a value in the info for this card with the given key."""
         return self.info[key]
+
+    def set_info(self, key, value, append = False):
+        """Set any special info you wish to the given key. Will append rather 
+        then set if append is True. In the append case this will set key to a
+        list if it currently is not set at all.
+        """
+        if append:
+            if key not in self.info:
+                self.info[key] = []
+            self.info[key].append(value)
+        else:
+            self.info[key] = value
