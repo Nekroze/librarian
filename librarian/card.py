@@ -40,21 +40,7 @@ class Card(object):
         """
         self.code, self.name, self.abilities, self.attributes, self.info = \
         eval(string)
-
-    def __str__(self):
-        """Called by str(MyCard)``. Returns a string that when given to
-        ``eval()`` will produce a tuple that can be unpacked and given to the
-        Card constructor to replicate this card.
-
-        This is used for saving the card for later usage.
-        """
-        return self.save_string()
-
-    def __repr__(self):
-        """Called by ``repr(MyCard)``. Returns the string '<Card:#>' where '#'
-        is replaced with the code for the card instance"""
-        return '<Card:{0}>'.format(str(self.code))
-
+        
     def is_valid(self):
         """Returns True if code is not 0 and self.name is not ''."""
         return self.code != 0 and self.name != ''
@@ -98,3 +84,27 @@ class Card(object):
             self.info[key].append(value)
         else:
             self.info[key] = value
+
+    def __eq__(self, other):
+        """Return True if this card's code is the same as the other's code."""
+        return self.code == other.code
+
+    def __neq__(self, other):
+        """Return True if this card's code is not the same as the other's
+        code.
+        """ 
+        return self.code != other.code
+
+    def __str__(self):
+        """Called by str(MyCard)``. Returns a string that when given to
+        ``eval()`` will produce a tuple that can be unpacked and given to the
+        Card constructor to replicate this card.
+
+        This is used for saving the card for later usage.
+        """
+        return self.save_string()
+
+    def __repr__(self):
+        """Called by ``repr(MyCard)``. Returns the string '<Card:#>' where '#'
+        is replaced with the code for the card instance"""
+        return '<Card:{0}>'.format(str(self.code))
