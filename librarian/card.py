@@ -34,10 +34,25 @@ class Card(object):
         return str((self.code, self.name, self.abilities, self.attributes,
         self.info))
 
+    def load_string(self, string):
+        """Takes a string as produced by ``Card.save_string()`` and sets this
+        card instances information to the previously saved cards information.
+        """
+        self.code, self.name, self.abilities, self.attributes, self.info = \
+        eval(string)
+
     def __str__(self):
+        """Called by str(MyCard)``. Returns a string that when given to
+        ``eval()`` will produce a tuple that can be unpacked and given to the
+        Card constructor to replicate this card.
+
+        This is used for saving the card for later usage.
+        """
         return self.save_string()
 
     def __repr__(self):
+        """Called by ``repr(MyCard)``. Returns the string '<Card:#>' where '#'
+        is replaced with the code for the card instance"""
         return '<Card:{0}>'.format(str(self.code))
 
     def is_valid(self):
