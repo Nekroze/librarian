@@ -3,3 +3,4 @@ README.rst
 setup.py
 librarian/__init__.py
 librarian/card.py
+test/test_card.py
