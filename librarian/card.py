@@ -26,20 +26,6 @@ class Card(object):
         self.abilities = {} if abilities is None else abilities
         self.attributes = [] if attributes is None else attributes
         self.info = {} if info is None else info
-
-    def save_string(self):
-        """Converts the Card as is into a string capable of constructing a new
-        Card identical to this one.
-        """
-        return str((self.code, self.name, self.abilities, self.attributes,
-        self.info))
-
-    def load_string(self, string):
-        """Takes a string as produced by ``Card.save_string()`` and sets this
-        card instances information to the previously saved cards information.
-        """
-        self.code, self.name, self.abilities, self.attributes, self.info = \
-        eval(string)
         
     def is_valid(self):
         """Returns True if code is not 0 and self.name is not ''."""
@@ -58,7 +44,7 @@ class Card(object):
 
     def get_abilities(self, phase):
         """Returns an ability list for the given phase ID."""
-        return self.abilities[phase]
+        return self.abilities[phase] if phase in self.abilities else None
 
     def add_ability(self, phase, ability):
         """Add the given ability to this Card under the given phase. Returns the
@@ -71,19 +57,36 @@ class Card(object):
 
     def get_info(self, key):
         """Return a value in the info for this card with the given key."""
-        return self.info[key]
+        return self.info[key] if key in self.info else None
 
     def set_info(self, key, value, append = False):
         """Set any special info you wish to the given key. Will append rather 
         then set if append is True. In the append case this will set key to a
         list if it currently is not set at all.
+
+        If the info value for the given key is already a list then it will work
+        as though append where True.
         """
-        if append:
+        if append or key in self.info and isinstance(self.info[key], list):
             if key not in self.info:
                 self.info[key] = []
             self.info[key].append(value)
-        else:
+        else:        
             self.info[key] = value
+
+    def save_string(self):
+        """Converts the Card as is into a string capable of constructing a new
+        Card identical to this one.
+        """
+        return str((self.code, self.name, self.abilities, self.attributes,
+        self.info))
+
+    def load_string(self, string):
+        """Takes a string as produced by ``Card.save_string()`` and sets this
+        card instances information to the previously saved cards information.
+        """
+        self.code, self.name, self.abilities, self.attributes, self.info = \
+        eval(string)
 
     def __eq__(self, other):
         """Return True if this card's code is the same as the other's code."""
