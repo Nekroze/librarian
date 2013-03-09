@@ -89,15 +89,17 @@ class Library(object):
             with sqlite3.connect(self.dbname) as carddb:
                 loadstring = carddb.execute(
                     "SELECT card FROM CARDS WHERE code = ?", code)
-                card = Card(*eval(self._prepare_load(loadstring)))
+                card = Card(loadstring=self._prepare_load(loadstring))
             if cache:
                 self.cache_card(card)
         return card
 
-    def save_card(self, card):
+    def save_card(self, card, cache=False):
         """Save the given card to the database. This calls each save event hook
         on the save string before commiting it to the database.
         """
+        if cache:
+            self.cache_card(card)
         savestring = self._prepare_save(str(card))
         with sqlite3.connect(self.dbname) as carddb:
             carddb.execute("INSERT INTO CARDS values (?, ?)", (card.code,

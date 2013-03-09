@@ -19,13 +19,15 @@ class Card(object):
         savestring = str(card)
         loaded = Card(*eval(savestring))
     """
-    def __init__(self, code=None, name=None, abilities=None,
-                 attributes=None, info=None):
-        self.code = 0 if code is None else code
-        self.name = '' if name is None else name
-        self.abilities = {} if abilities is None else abilities
-        self.attributes = [] if attributes is None else attributes
-        self.info = {} if info is None else info
+    def __init__(self, code=None, name=None, loadstring=None):
+        if loadstring is None:
+            self.code = 0 if code is None else code
+            self.name = '' if name is None else name
+            self.abilities = {}
+            self.attributes = []
+            self.info = {}
+        else:
+            self.load_string(loadstring)
 
     def is_valid(self):
         """Returns True if code is not 0 and self.name is not ''."""
