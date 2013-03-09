@@ -13,10 +13,31 @@ class Library(object):
     Library also allows load and save hooks that allow a list of function to be
     called on each string as it is saved and loaded.
     """
-    def __init__(self, dbname):
+    def __init__(self, dbname, cachelimit = 100):
         self.dbname = dbname
         self.save_events = []
         self.load_events = []
+        self.cachelimit = cachelimit
+        self.card_cache = {}
+        self.card_cache_list = []
+
+    def cached(self, code):
+        """Return True if there is a card for the given code in the cache."""
+        return code in self.card_cache[code]
+
+    def cache_card(self, card):
+        """Cache the card for faster future lookups. Removes the oldest card
+        when the card cache stores more cards then this libraries cache limit.
+        """
+        code = card.code
+        self.card_cache[code] = card
+        if code in self.card_cache_list:
+            self.card_cache_list.remove(code)
+        self.card_cache_list.append(code)
+
+        if len(self.card_cache_list) > self.cachelimit:
+            del self.card_cache[self.card_cache_list.pop(0)]
+
 
     def create_db(self):
         """Create the CARDS table in the sqlite3 database."""
@@ -58,12 +79,19 @@ class Library(object):
     def load_card(self, code):
         """Load a card with the given code from the database. This calls each
         save event hook on the save string before commiting it to the database.
+
+        Will cache each resulting card for faster future lookups with this
+        method while respecting the libraries cache limit.
         """
-        loadstring = None
-        with sqlite3.connect(self.dbname) as db:
-            loadstring = db.execute("SELECT card FROM CARDS WHERE code = ?",
+        card = self.card_cache.get(code, None)
+        if card is None:
+            loadstring = None
+            with sqlite3.connect(self.dbname) as db:
+                loadstring = db.execute("SELECT card FROM CARDS WHERE code = ?",
                                      code)
-        return Card(*eval(self._prepare_load(loadstring)))
+                card = Card(*eval(self._prepare_load(loadstring)))
+            self.cache_card(card)
+        return card
 
     def save_card(self, card):
         """Save the given card to the database. This calls each save event hook
