@@ -13,7 +13,7 @@ class Library(object):
     Library also allows load and save hooks that allow a list of function to be
     called on each string as it is saved and loaded.
     """
-    def __init__(self, dbname, cachelimit = 100):
+    def __init__(self, dbname, cachelimit=100):
         self.dbname = dbname
         self.save_events = []
         self.load_events = []
@@ -38,11 +38,10 @@ class Library(object):
         if len(self.card_cache_list) > self.cachelimit:
             del self.card_cache[self.card_cache_list.pop(0)]
 
-
     def create_db(self):
         """Create the CARDS table in the sqlite3 database."""
-        with sqlite3.connect(self.dbname) as db:
-            db.execute("CREATE TABLE CARDS(code NUMBER, card STRING)")
+        with sqlite3.connect(self.dbname) as carddb:
+            carddb.execute("CREATE TABLE CARDS(code NUMBER, card STRING)")
 
     def add_save_hook(self, func):
         """Add the given function to the save events.
@@ -86,9 +85,9 @@ class Library(object):
         card = self.card_cache.get(code, None)
         if card is None:
             loadstring = None
-            with sqlite3.connect(self.dbname) as db:
-                loadstring = db.execute("SELECT card FROM CARDS WHERE code = ?",
-                                     code)
+            with sqlite3.connect(self.dbname) as carddb:
+                loadstring = carddb.execute(
+                    "SELECT card FROM CARDS WHERE code = ?", code)
                 card = Card(*eval(self._prepare_load(loadstring)))
             self.cache_card(card)
         return card
@@ -98,5 +97,6 @@ class Library(object):
         on the save string before commiting it to the database.
         """
         savestring = self._prepare_save(str(card))
-        with sqlite3.connect(self.dbname) as db:
-            db.execute("INSERT INTO CARDS values (?, ?)", (card.code, savestring))
+        with sqlite3.connect(self.dbname) as carddb:
+            carddb.execute("INSERT INTO CARDS values (?, ?)", (card.code,
+                                                               savestring))
