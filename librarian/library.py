@@ -75,12 +75,13 @@ class Library(object):
             loadstring = func(loadstring)
         return loadstring
 
-    def load_card(self, code):
+    def load_card(self, code, cache=True):
         """Load a card with the given code from the database. This calls each
         save event hook on the save string before commiting it to the database.
 
         Will cache each resulting card for faster future lookups with this
-        method while respecting the libraries cache limit.
+        method while respecting the libraries cache limit. However only if the
+        cache argument is True.
         """
         card = self.card_cache.get(code, None)
         if card is None:
@@ -89,7 +90,8 @@ class Library(object):
                 loadstring = carddb.execute(
                     "SELECT card FROM CARDS WHERE code = ?", code)
                 card = Card(*eval(self._prepare_load(loadstring)))
-            self.cache_card(card)
+            if cache:
+                self.cache_card(card)
         return card
 
     def save_card(self, card):
