@@ -3,6 +3,7 @@ __author__ = 'Taylor "Nekroze" Lawson'
 __email__ = 'nekroze@eturnilnetwork.com'
 
 import random
+from .card import Card
 
 
 class Deck(object):
@@ -55,3 +56,38 @@ class Deck(object):
         for index in range(number):
             output.append(self.get_card(index, cache, remove))
         return output
+
+    def contains_card(self, code):
+        """Returns true if the given code is in the remaining cards."""
+        return code in self.cards
+
+    def contians_detail(self, detail, field=0):
+        """Returns how many remaining cards in the deck have the specified
+        detail.
+
+        This method requires a library to be stored in the deck instance and
+        will return None if there is no library.
+
+        The field option describes what information to check:
+         - 0: Attribute
+         - 1: Ability (searches for the given phase)
+         - 2+: Info (searches for the given info key)
+        """
+        if self.library is None:
+            return None
+
+        check = None
+        if field == 0:
+            check = Card.has_attribute
+        elif field == 1:
+            check = Card.get_abilities
+        else:
+            check = Card.get_info
+
+        lib = self.library
+        matches = 0
+        for code in self.cards:
+            card = lib.load_card(code)
+            if check(card, detail):
+                matches += 1
+        return matches
