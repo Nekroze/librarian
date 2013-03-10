@@ -26,6 +26,55 @@ if platform.system() != 'Windows' and sys.version_info[0] == 3:
     PYTHON = 'python3'
 
 
+class CleanUp(Command):
+    """Cleanup all python/cython temporary or build files."""
+    description = "Cleanup all python/cython temporary or build files."
+    user_options = []
+
+    def initialize_options(self):
+        """pass."""
+        pass
+
+    def finalize_options(self):
+        """pass."""
+        pass
+
+    def run(self):
+        """Run CleanUp."""
+        import fnmatch
+        import shutil
+        import glob
+        matches = []
+        matches.extend(glob.glob('./*.pyc'))
+        matches.extend(glob.glob('./*.pyd'))
+        matches.extend(glob.glob('./*.pyo'))
+        matches.extend(glob.glob('./*.so'))
+        dirs = []
+        dirs.extend(glob.glob('./__pycache__'))
+        dirs.extend(glob.glob('docs/_build'))
+        for cleandir in [SOURCE, 'test']:
+            for root, dirnames, filenames in os.walk(cleandir):
+                for filename in fnmatch.filter(filenames, '*.pyc'):
+                    matches.append(os.path.join(root, filename))
+                for filename in fnmatch.filter(filenames, '*.pyd'):
+                    matches.append(os.path.join(root, filename))
+                for filename in fnmatch.filter(filenames, '*.pyo'):
+                    matches.append(os.path.join(root, filename))
+                for filename in fnmatch.filter(filenames, '*.so'):
+                    matches.append(os.path.join(root, filename))
+                for filename in fnmatch.filter(filenames, '*.dll'):
+                    matches.append(os.path.join(root, filename))
+                for filename in fnmatch.filter(filenames, '*.c'):
+                    matches.append(os.path.join(root, filename))
+                for dirname in fnmatch.filter(dirnames, '__pycache__'):
+                    dirs.append(os.path.join(root, dirname))
+
+        for match in matches:
+            os.remove(match)
+        for dir in dirs:
+            shutil.rmtree(dir)
+
+
 class Test(Command):
     """Run test suite."""
     description = "Run test suite"
@@ -132,7 +181,7 @@ class PyPiUpload(Command):
             sys.exit(1)
         print('PyPi Upload successful.')
 
-			
+
 vRe = re.compile(r'__version__\s*=\s*(\S+)', re.M)
 data = open('setup.py').read()
 
@@ -145,6 +194,7 @@ kwds['license'] = PROJECTLICENSE
 
 setup(
     cmdclass={
+        'cleanup': CleanUp,
         'style': Style,
         'test': Test,
         'prep': Prep,
