@@ -33,7 +33,7 @@ class Deck(object):
         if len(self.cards) < index:
             return None
         retreiver = self.cards.pop if remove else self.cards.__getitem__
-            
+
         if self.library is None:
             return retreiver(index)
         else:

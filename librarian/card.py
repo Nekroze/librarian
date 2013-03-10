@@ -90,7 +90,7 @@ class Card(object):
         args = eval(string)
         self.code, self.name = args[0:2]
         self.abilities, self.attributes, self.info = args[2:]
-        
+
     def __eq__(self, other):
         """Return True if this card's code is the same as the other's code."""
         return self.code == other.code
