@@ -16,8 +16,8 @@ class Library(object):
     """
     def __init__(self, dbname, cachelimit=100):
         self.dbname = dbname
-        self.save_events = []
-        self.load_events = []
+        self.save_chain = []
+        self.load_chain = []
         self.cachelimit = cachelimit
         self.card_cache = {}
         self.card_cache_list = []
@@ -52,7 +52,7 @@ class Library(object):
 
         Event functions should take and output a string.
         """
-        self.save_events.append(func)
+        self.save_chain.append(func)
 
     def add_load_hook(self, func):
         """
@@ -61,13 +61,13 @@ class Library(object):
 
         Event functions should take and output a string.
         """
-        self.load_events.append(func)
+        self.load_chain.append(func)
 
     def _prepare_save(self, savestring):
         """
         Run each save event on the given savestring and return the product.
         """
-        for func in self.save_events:
+        for func in self.save_chain:
             savestring = func(savestring)
         return savestring
 
@@ -75,7 +75,7 @@ class Library(object):
         """
         Run each load event on the given loadstring and return the product.
         """
-        for func in self.load_events:
+        for func in self.load_chain:
             loadstring = func(loadstring)
         return loadstring
 
