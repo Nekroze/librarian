@@ -7,7 +7,8 @@ from .card import Card
 
 
 class Library(object):
-    """Library wraps an sqlite3 database that stores card codes and their
+    """
+    Library wraps an sqlite3 database that stores card codes and their
     corrosponding savestrings.
 
     Library also allows load and save hooks that allow a list of function to be
@@ -26,7 +27,8 @@ class Library(object):
         return code in self.card_cache[code]
 
     def cache_card(self, card):
-        """Cache the card for faster future lookups. Removes the oldest card
+        """
+        Cache the card for faster future lookups. Removes the oldest card
         when the card cache stores more cards then this libraries cache limit.
         """
         code = card.code
@@ -44,7 +46,8 @@ class Library(object):
             carddb.execute("CREATE TABLE CARDS(code NUMBER, card STRING)")
 
     def add_save_hook(self, func):
-        """Add the given function to the save events.
+        """
+        Add the given function to the save events.
         functions will be called in the order that they where added.
 
         Event functions should take and output a string.
@@ -52,7 +55,8 @@ class Library(object):
         self.save_events.append(func)
 
     def add_load_hook(self, func):
-        """Add the given function to the load events.
+        """
+        Add the given function to the load events.
         functions will be called in the order that they where added.
 
         Event functions should take and output a string.
@@ -60,23 +64,24 @@ class Library(object):
         self.load_events.append(func)
 
     def _prepare_save(self, savestring):
-        """Run each save event on the given savestring and return the
-        product.
+        """
+        Run each save event on the given savestring and return the product.
         """
         for func in self.save_events:
             savestring = func(savestring)
         return savestring
 
     def _prepare_load(self, loadstring):
-        """Run each load event on the given loadstring and return the
-        product.
+        """
+        Run each load event on the given loadstring and return the product.
         """
         for func in self.load_events:
             loadstring = func(loadstring)
         return loadstring
 
     def load_card(self, code, cache=True):
-        """Load a card with the given code from the database. This calls each
+        """
+        Load a card with the given code from the database. This calls each
         save event hook on the save string before commiting it to the database.
 
         Will cache each resulting card for faster future lookups with this
@@ -95,7 +100,8 @@ class Library(object):
         return card
 
     def save_card(self, card, cache=False):
-        """Save the given card to the database. This calls each save event hook
+        """
+        Save the given card to the database. This calls each save event hook
         on the save string before commiting it to the database.
         """
         if cache:

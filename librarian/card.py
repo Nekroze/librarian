@@ -4,7 +4,8 @@ __email__ = 'nekroze@eturnilnetwork.com'
 
 
 class Card(object):
-    """The card stores general information about the card.
+    """
+    The card stores general information about the card.
      - code: the unique identifier for this card.
      - name: name of this card to be displayed.
      - abilities: dict of phase id's containing a list of action descriptors.
@@ -38,7 +39,8 @@ class Card(object):
         return attribute in self.attributes
 
     def add_attribute(self, attribute):
-        """Add the given attribute to this Card. Returns the length of
+        """
+        Add the given attribute to this Card. Returns the length of
         attributes after addition.
         """
         self.attributes.append(attribute)
@@ -62,7 +64,8 @@ class Card(object):
         return self.info[key] if key in self.info else None
 
     def set_info(self, key, value, append=False):
-        """Set any special info you wish to the given key. Will append rather
+        """
+        Set any special info you wish to the given key. Will append rather
         then set if append is True. In the append case this will set key to a
         list if it currently is not set at all.
 
@@ -77,14 +80,16 @@ class Card(object):
             self.info[key] = value
 
     def save_string(self):
-        """Converts the Card as is into a string capable of constructing a new
+        """
+        Converts the Card as is into a string capable of constructing a new
         Card identical to this one.
         """
         return str((self.code, self.name, self.abilities, self.attributes,
                     self.info))
 
     def load_string(self, string):
-        """Takes a string as produced by ``Card.save_string()`` and sets this
+        """
+        Takes a string as produced by ``Card.save_string()`` and sets this
         card instances information to the previously saved cards information.
         """
         args = eval(string)
@@ -96,13 +101,14 @@ class Card(object):
         return self.code == other.code
 
     def __neq__(self, other):
-        """Return True if this card's code is not the same as the other's
-        code.
+        """
+        Return True if this card's code is not the same as the other's code.
         """
         return self.code != other.code
 
     def __str__(self):
-        """Called by str(MyCard)``. Returns a string that when given to
+        """
+        Called by ``str(MyCard)``. Returns a string that when given to
         ``eval()`` will produce a tuple that can be unpacked and given to the
         Card constructor to replicate this card.
 
@@ -111,6 +117,8 @@ class Card(object):
         return self.save_string()
 
     def __repr__(self):
-        """Called by ``repr(MyCard)``. Returns the string '<Card:#>' where '#'
-        is replaced with the code for the card instance"""
+        """
+        Called by ``repr(MyCard)``. Returns the string '<Card:#>' where '#'
+        is replaced with the code for the card instance.
+        """
         return '<Card:{0}>'.format(str(self.code))
