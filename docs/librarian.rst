@@ -6,7 +6,7 @@ librarian Package
 
 .. automodule:: librarian.__init__
     :members:
-    :show-inheritance:
+    :undoc-members:
     :special-members:
     :private-members:
 
@@ -15,6 +15,7 @@ librarian Package
 
 .. automodule:: librarian.card
     :members:
+    :undoc-members:
     :show-inheritance:
     :special-members:
     :private-members:
@@ -24,6 +25,7 @@ librarian Package
 
 .. automodule:: librarian.deck
     :members:
+    :undoc-members:
     :show-inheritance:
     :special-members:
     :private-members:
@@ -33,6 +35,7 @@ librarian Package
 
 .. automodule:: librarian.library
     :members:
+    :undoc-members:
     :show-inheritance:
     :special-members:
     :private-members:
