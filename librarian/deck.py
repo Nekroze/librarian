@@ -7,7 +7,7 @@ from .card import Card
 
 
 class Deck(object):
-    """A collection of possibly recuring cards."""
+    """A collection of possibly recuring cards stored as code's."""
     def __init__(self, library=None, cards=None):
         self.library = library
         self.cards = cards if cards is not None else []

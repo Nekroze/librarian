@@ -121,4 +121,4 @@ class Card(object):
         Called by ``repr(MyCard)``. Returns the string '<Card:#>' where '#'
         is replaced with the code for the card instance.
         """
-        return '<Card:{0}>'.format(str(self.code))
+        return "<Card:{0}>".format(str(self.code))
