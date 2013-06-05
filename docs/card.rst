@@ -1,6 +1,3 @@
-librarian Package
-=================
-
 :mod:`card` Module
 ------------------
 
