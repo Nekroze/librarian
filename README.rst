@@ -1,4 +1,6 @@
 librarian
 ---------
 
-Python advanced card game library.
+Python general card game library.
+
+Go to http://librarian.readthedocs.org for documentation.
