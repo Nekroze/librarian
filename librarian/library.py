@@ -110,3 +110,7 @@ class Library(object):
         with sqlite3.connect(self.dbname) as carddb:
             carddb.execute("INSERT INTO CARDS values (?, ?)", (card.code,
                                                                savestring))
+
+    def connection(self):
+        """Connect to the underlying database and return the connection."""
+        return sqlite3.connect(self.dbname)
