@@ -209,7 +209,11 @@ setup(
     packages=[SOURCE],
     ext_modules = EXTENSIONS,
     classifiers=[
-        # DEFINE YOURSELF
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Topic :: Games/Entertainment"
     ],
     **kwds
 )
