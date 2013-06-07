@@ -64,21 +64,18 @@ class Card(object):
         """Return a value in the info for this card with the given key."""
         return self.info[key] if key in self.info else None
 
-    def set_info(self, key, value, append=False):
+    def set_info(self, key, value, append=True):
         """
-        Set any special info you wish to the given key. Will append rather
-        then set if append is True. In the append case this will set key to a
-        list if it currently is not set at all.
-
-        If the info value for the given key is already a list then it will work
-        as though append where True.
+        Set any special info you wish to the given key. Each info is stored in
+        a list and will be appended to rather then overriden unless append is
+        False.
         """
-        if append or key in self.info and isinstance(self.info[key], list):
+        if append:
             if key not in self.info:
                 self.info[key] = []
             self.info[key].append(value)
         else:
-            self.info[key] = [value]
+            self.info[key] = value
 
     def save_string(self):
         """
