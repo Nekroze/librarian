@@ -94,6 +94,7 @@ class Library(object):
             with sqlite3.connect(self.dbname) as carddb:
                 loadstring = carddb.execute(
                     "SELECT card FROM CARDS WHERE code = ?", code)
+                loadstring = loadstring.fetchone()[0]
                 card = Card(loadstring=self._prepare_load(loadstring))
             if cache:
                 self.cache_card(card)
