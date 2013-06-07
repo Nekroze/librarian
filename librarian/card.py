@@ -78,7 +78,7 @@ class Card(object):
                 self.info[key] = []
             self.info[key].append(value)
         else:
-            self.info[key] = value
+            self.info[key] = [value]
 
     def save_string(self):
         """
