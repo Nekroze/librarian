@@ -6,7 +6,7 @@ import platform
 from distutils.core import setup, Command
 
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 __author__ = 'Taylor "Nekroze" Lawson'
 __email__ = 'nekroze@eturnilnetwork.com'
 SOURCE = 'librarian'
