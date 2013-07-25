@@ -54,7 +54,7 @@ class Test_Card:
         card.set_info('description', 'For testing.')
 
         assert card.get_info('art') is None
-        assert card.get_info('description') == 'For testing.'
+        assert card.get_info('description')[0] == 'For testing.'
 
     def test_set_info(self):
         card = Card()
@@ -62,17 +62,17 @@ class Test_Card:
         card.set_info('art', 1, True)
         card.set_info('art', 2)
 
-        assert card.get_info('description') == 'For testing.'
+        assert card.get_info('description')[0] == 'For testing.'
         assert 1 in card.get_info('art')
         assert 2 in card.get_info('art')
 
-    def test_save_string(self):
+    def test_save_load(self):
         original = Card(1, 'Test')
         original.add_ability('attack', 'Slap')
         original.add_attribute('test')
         original.set_info('art', 1)
-        savestring = original.save_string()
-        loaded = Card(loadstring=savestring)
+        savedict = original.save()
+        loaded = Card(loaddict=savedict)
 
         assert loaded.code == original.code
         assert loaded.name == original.name

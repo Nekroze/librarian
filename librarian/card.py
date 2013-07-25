@@ -28,7 +28,7 @@ class Card(object):
         self.attributes = []
         self.info = {}
         if loaddict is not None:
-            self.load_string(loaddict)
+            self.load(loaddict)
 
     def is_valid(self):
         """Returns True if code is not 0 and self.name is not ''."""
@@ -89,11 +89,11 @@ class Card(object):
         Takes a carddict as produced by ``Card.save`` and sets this card
         instances information to the previously saved cards information.
         """
-        self.code = args["code"]
-        self.name = args["name"]
-        self.abilities = args["abilities"]
-        self.attributes = args["attributes"]
-        self.info =  = args["info"]
+        self.code = carddict["code"]
+        self.name = carddict["name"]
+        self.abilities = carddict["abilities"]
+        self.attributes = carddict["attributes"]
+        self.info = carddict["info"]
 
     def __eq__(self, other):
         """Return True if this card's code is the same as the other's code."""
