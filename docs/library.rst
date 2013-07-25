@@ -1,6 +1,3 @@
-librarian Package
-=================
-
 :mod:`library` Module
 ---------------------
 
