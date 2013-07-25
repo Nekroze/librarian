@@ -12,9 +12,9 @@ Welcome to librarian's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
 
-   librarian
+   modules
 
 Feedback
 ========

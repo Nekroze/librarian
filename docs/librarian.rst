@@ -1,15 +1,27 @@
-:mod:`librarian` Package
-------------------------
+librarian Package
+=================
 
-.. automodule:: librarian.__init__
+:mod:`card` Module
+------------------
+
+.. automodule:: librarian.card
     :members:
     :undoc-members:
     :show-inheritance:
 
+:mod:`deck` Module
+------------------
 
-.. toctree::
-   :maxdepth: 4
+.. automodule:: librarian.deck
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
-   card
-   deck
-   library
+:mod:`library` Module
+---------------------
+
+.. automodule:: librarian.library
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
