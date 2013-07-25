@@ -1,7 +1,6 @@
 """The Library class, an sqlite database of cards."""
 __author__ = 'Taylor "Nekroze" Lawson'
 __email__ = 'nekroze@eturnilnetwork.com'
-from functools import partial
 import sqlite3
 from .card import Card
 
@@ -46,8 +45,8 @@ class Library(object):
     def create_db(self):
         """Create the CARDS table in the sqlite3 database."""
         with sqlite3.connect(self.dbname) as carddb:
-            carddb.execute("CREATE TABLE CARDS(code NUMBER, name STRING,
-abilities STRING, attributes STRING, info STRING)")
+            carddb.execute("""CREATE TABLE CARDS(code NUMBER, name STRING,
+            abilities STRING, attributes STRING, info STRING)""")
 
     def load_card(self, code, cache=True):
         """
@@ -77,10 +76,10 @@ abilities STRING, attributes STRING, info STRING)")
         """
         if cache:
             self.cache_card(card)
-        savedict = card.save()
+        carddict = card.save()
         with sqlite3.connect(self.dbname) as carddb:
             carddb.execute("INSERT INTO CARDS VALUES(?, ?, ?, ?, ?)",
-                           [cardict[key] for key in FIELDS])
+                           [carddict[key] for key in FIELDS])
 
     def connection(self):
         """Connect to the underlying database and return the connection."""

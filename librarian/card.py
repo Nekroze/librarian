@@ -111,9 +111,10 @@ class Card(object):
         ``eval()`` will produce a tuple that can be unpacked and given to the
         Card constructor to replicate this card.
 
-        This is used for saving the card for later usage.
+        This is used for saving the card as a string representation of a
+        carddict for later usage.
         """
-        return self.save_string()
+        return str(self.save())
 
     def __repr__(self):
         """
