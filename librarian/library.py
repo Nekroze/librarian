@@ -127,7 +127,8 @@ class Library(object):
             self.cache_card(card)
         carddict = card.save()
         with sqlite3.connect(self.dbname) as carddb:
-            carddb.execute("DELETE from CARDS where code = ?", (carddict["code"],))
+            carddb.execute("DELETE from CARDS where code = ?",
+                           (carddict["code"],))
             carddb.execute("INSERT INTO CARDS VALUES(?, ?, ?, ?, ?)",
                            [carddict[key] if isinstance(carddict[key], str)
                             else str(carddict[key]) for key in FIELDS])

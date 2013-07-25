@@ -1,6 +1,7 @@
 """Generic Card Class."""
 __author__ = 'Taylor "Nekroze" Lawson'
 __email__ = 'nekroze@eturnilnetwork.com'
+from six import text_type
 
 
 class Card(object):
@@ -90,17 +91,17 @@ class Card(object):
         instances information to the previously saved cards information.
         """
         self.code = carddict["code"]
-        if isinstance(self.code, (str, unicode)):
+        if isinstance(self.code, text_type):
             self.code = eval(self.code)
         self.name = carddict["name"]
         self.abilities = carddict["abilities"]
-        if isinstance(self.abilities, (str, unicode)):
+        if isinstance(self.abilities, text_type):
             self.abilities = eval(self.abilities)
         self.attributes = carddict["attributes"]
-        if isinstance(self.attributes, (str, unicode)):
+        if isinstance(self.attributes, text_type):
             self.attributes = eval(self.attributes)
         self.info = carddict["info"]
-        if isinstance(self.info, (str, unicode)):
+        if isinstance(self.info, text_type):
             self.info = eval(self.info)
 
     def __eq__(self, other):

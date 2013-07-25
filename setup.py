@@ -208,6 +208,7 @@ setup(
     platforms=PLATFORMS,
     packages=[SOURCE],
     ext_modules = EXTENSIONS,
+    requires = ['six'],
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
