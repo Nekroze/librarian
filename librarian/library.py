@@ -90,17 +90,57 @@ class Library(object):
         return [self.load_card(eval(code)) for code in codes]
 
     def filter_search(self, code=None, name=None, abilities=None,
-        attributes=None, info=None):
+                      attributes=None, info=None):
         """
         Return a list of codes that have the given information values stored.
 
-        Can take a code, name string, abilities dict {phase: ability list/"*"},
-        attributes list, info dict {key, value list/"*"}.
+        Can take a code integer, name string, abilities dict {phase: ability
+        list/"*"}, attributes list, info dict {key, value list/"*"}.
 
         In the above argument examples "*" is a string that may be passed
-        instead of a list as the dict value to match anything that stores that key.
+        instead of a list as the dict value to match anything that stores that
+        key.
         """
-        pass
+        select = ["SELECT code FROM CARDS"]
+        where = []
+
+        def Fwhere(field, pattern):
+            """Add where filter for the given field with the given pattern."""
+            where.append("WHERE {0} LIKE '{1}'".format(field, pattern))
+
+        def Fstring(field, string):
+            """Add a where filter based on a string."""
+            Fwhere(field, "%{0}%".format(string if not isinstance(string, str)
+                                         else str(string)))
+
+        def Fdict(field, data):
+            """Add where filters to search for dict keys and values."""
+            for key, value in data.items():
+                if value == '*':
+                    Fstring(field, key)
+                else:
+                    Fstring(field, "{0}:%{1}".format(key, value if not
+                                                     isinstance(value, str)
+                                                     else str(value)))
+
+        def Flist(field, data):
+            """Add where filters to search for elements of a list."""
+            for elem in data:
+                Fstring(field, elem if not isinstance(elem, str) else
+                        str(elem))
+
+        args = [(Fstring, "code", code),
+                (Fstring, "name", name),
+                (Fdict, "abilities", abilities),
+                (Flist, "attributes", attributes),
+                (Fdict, "info", info)]
+        for func, field, data in args:
+            if data is not None:
+                func(field, data)
+
+        command = select + ' AND '.join(where)
+        with sqlite3.connect(self.dbname) as carddb:
+            return carddb.execute(command).fetchall()
 
     def connection(self):
         """Connect to the underlying database and return the connection."""
