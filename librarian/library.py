@@ -45,7 +45,7 @@ class Library(object):
     def create_db(self):
         """Create the CARDS table in the sqlite3 database."""
         with sqlite3.connect(self.dbname) as carddb:
-            carddb.execute("""CREATE TABLE CARDS(code NUMBER, name STRING,
+            carddb.execute("""CREATE TABLE CARDS(code STRING, name STRING,
             abilities STRING, attributes STRING, info STRING)""")
 
     def load_card(self, code, cache=True):
@@ -80,6 +80,27 @@ class Library(object):
         with sqlite3.connect(self.dbname) as carddb:
             carddb.execute("INSERT INTO CARDS VALUES(?, ?, ?, ?, ?)",
                            [carddict[key] for key in FIELDS])
+
+    def retreive_all(self):
+        """
+        Return a list of all the cards stored in the library database.
+        """
+        with sqlite3.connect(self.dbname) as carddb:
+            codes = carddb.execute("SELECT code FROM CARDS").fetchall()
+        return [self.load_card(eval(code)) for code in codes]
+
+    def filter_search(self, code=None, name=None, abilities=None,
+        attributes=None, info=None):
+        """
+        Return a list of codes that have the given information values stored.
+
+        Can take a code, name string, abilities dict {phase: ability list/"*"},
+        attributes list, info dict {key, value list/"*"}.
+
+        In the above argument examples "*" is a string that may be passed
+        instead of a list as the dict value to match anything that stores that key.
+        """
+        pass
 
     def connection(self):
         """Connect to the underlying database and return the connection."""
