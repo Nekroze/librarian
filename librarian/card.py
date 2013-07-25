@@ -90,10 +90,18 @@ class Card(object):
         instances information to the previously saved cards information.
         """
         self.code = carddict["code"]
+        if isinstance(self.code, (str, unicode)):
+            self.code = eval(self.code)
         self.name = carddict["name"]
         self.abilities = carddict["abilities"]
+        if isinstance(self.abilities, (str, unicode)):
+            self.abilities = eval(self.abilities)
         self.attributes = carddict["attributes"]
+        if isinstance(self.attributes, (str, unicode)):
+            self.attributes = eval(self.attributes)
         self.info = carddict["info"]
+        if isinstance(self.info, (str, unicode)):
+            self.info = eval(self.info)
 
     def __eq__(self, other):
         """Return True if this card's code is the same as the other's code."""

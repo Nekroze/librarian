@@ -100,13 +100,18 @@ class Library(object):
         Will cache each resulting card for faster future lookups with this
         method while respecting the libraries cache limit. However only if the
         cache argument is True.
+
+        Will return None if the card could not be loaded.
         """
         card = self.card_cache.get(code, None)
         if card is None:
+            code = code if isinstance(code, str) else str(code)
             with sqlite3.connect(self.dbname) as carddb:
-                loadstring = carddb.execute(
-                    "SELECT * FROM CARDS WHERE code = ?", code)
-                loadrow = loadstring.fetchone()
+                result = carddb.execute(
+                    "SELECT * FROM CARDS WHERE code = ?", (code,))
+                loadrow = result.fetchone()
+                if not loadrow:
+                    return None
                 loaddict = dict(zip(FIELDS, loadrow))
                 card = Card(loaddict=loaddict)
             if cache:
@@ -122,8 +127,10 @@ class Library(object):
             self.cache_card(card)
         carddict = card.save()
         with sqlite3.connect(self.dbname) as carddb:
+            carddb.execute("DELETE from CARDS where code = ?", (carddict["code"],))
             carddb.execute("INSERT INTO CARDS VALUES(?, ?, ?, ?, ?)",
-                           [carddict[key] for key in FIELDS])
+                           [carddict[key] if isinstance(carddict[key], str)
+                            else str(carddict[key]) for key in FIELDS])
 
     def retreive_all(self):
         """
@@ -136,7 +143,8 @@ class Library(object):
     def filter_search(self, code=None, name=None, abilities=None,
                       attributes=None, info=None):
         """
-        Return a list of codes that have the given information values stored.
+        Return a list of codes and names pertaining to cards that have the
+        given information values stored.
 
         Can take a code integer, name string, abilities dict {phase: ability
         list/"*"}, attributes list, info dict {key, value list/"*"}.
@@ -145,7 +153,7 @@ class Library(object):
         instead of a list as the dict value to match anything that stores that
         key.
         """
-        command = "SELECT code FROM CARDS "
+        command = "SELECT code, name FROM CARDS "
         command += Where_filter_gen(("code", code), ("name", name),
                                     ("abilities", abilities),
                                     ("attributes", attributes),
