@@ -4,4 +4,6 @@ librarian
 .. toctree::
    :maxdepth: 4
 
-   librarian
+   library
+   deck
+   card
