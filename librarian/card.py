@@ -21,15 +21,14 @@ class Card(object):
     ``loaded = Card(*eval(savestring))``
     ``assert loaded == original``
     """
-    def __init__(self, code=None, name=None, loadstring=None):
-        if loadstring is None:
-            self.code = 0 if code is None else code
-            self.name = '' if name is None else name
-            self.abilities = {}
-            self.attributes = []
-            self.info = {}
-        else:
-            self.load_string(loadstring)
+    def __init__(self, code=None, name=None, loaddict=None):
+        self.code = 0 if code is None else code
+        self.name = '' if name is None else name
+        self.abilities = {}
+        self.attributes = []
+        self.info = {}
+        if loaddict is not None:
+            self.load_string(loaddict)
 
     def is_valid(self):
         """Returns True if code is not 0 and self.name is not ''."""
@@ -77,22 +76,24 @@ class Card(object):
         else:
             self.info[key] = value
 
-    def save_string(self):
+    def save(self):
         """
-        Converts the Card as is into a string capable of constructing a new
-        Card identical to this one.
+        Converts the Card as is into a dictionary capable of reconstructing the
+        card with ``Card.load`` or serialized to a string for storage.
         """
-        return str((self.code, self.name, self.abilities, self.attributes,
-                    self.info))
+        return dict(code=self.code, name=self.name, abilities=self.abilities,
+                    attributes=self.attributes, info=self.info)
 
-    def load_string(self, string):
+    def load(self, carddict):
         """
-        Takes a string as produced by ``Card.save_string()`` and sets this
-        card instances information to the previously saved cards information.
+        Takes a carddict as produced by ``Card.save`` and sets this card
+        instances information to the previously saved cards information.
         """
-        args = eval(string)
-        self.code, self.name = args[0:2]
-        self.abilities, self.attributes, self.info = args[2:]
+        self.code = args["code"]
+        self.name = args["name"]
+        self.abilities = args["abilities"]
+        self.attributes = args["attributes"]
+        self.info =  = args["info"]
 
     def __eq__(self, other):
         """Return True if this card's code is the same as the other's code."""

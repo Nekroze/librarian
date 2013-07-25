@@ -6,6 +6,9 @@ import sqlite3
 from .card import Card
 
 
+FIELDS = ("code", "name", "abilities", "attributes", "info")
+
+
 class Library(object):
     """
     Library wraps an sqlite3 database that stores card codes and their
@@ -43,47 +46,8 @@ class Library(object):
     def create_db(self):
         """Create the CARDS table in the sqlite3 database."""
         with sqlite3.connect(self.dbname) as carddb:
-            carddb.execute("CREATE TABLE CARDS(code NUMBER, card STRING)")
-
-    def add_save_hook(self, func, *args, **kwargs):
-        """
-        Add the given function to the save events.
-        functions will be called in the order that they where added.
-
-        Event functions can be given any number of arguments when added to the
-        hook and be able to take a savestring keyword argument for the string
-        to be saved to be passed along the event chain. Each event should
-        return a string suitable to be pushed to the next event.
-        """
-        self.save_chain.append(partial(func, *args, **kwargs))
-
-    def add_load_hook(self, func, *args, **kwargs):
-        """
-        Add the given function to the load events.
-        functions will be called in the order that they where added.
-
-        Event functions can be given any number of arguments when added to the
-        hook and be able to take a loadstring keyword argument for the string
-        to be saved to be passed along the event chain. Each event should
-        return a string suitable to be pushed to the next event.
-        """
-        self.load_chain.append(partial(func, *args, **kwargs))
-
-    def _prepare_save(self, savestring):
-        """
-        Run each save event on the given savestring and return the product.
-        """
-        for func in self.save_chain:
-            savestring = func(savestring=savestring)
-        return savestring
-
-    def _prepare_load(self, loadstring):
-        """
-        Run each load event on the given loadstring and return the product.
-        """
-        for func in self.load_chain:
-            loadstring = func(loadstring=loadstring)
-        return loadstring
+            carddb.execute("CREATE TABLE CARDS(code NUMBER, name STRING,
+abilities STRING, attributes STRING, info STRING)")
 
     def load_card(self, code, cache=True):
         """
@@ -96,12 +60,12 @@ class Library(object):
         """
         card = self.card_cache.get(code, None)
         if card is None:
-            loadstring = None
             with sqlite3.connect(self.dbname) as carddb:
                 loadstring = carddb.execute(
-                    "SELECT card FROM CARDS WHERE code = ?", code)
-                loadstring = loadstring.fetchone()[0]
-                card = Card(loadstring=self._prepare_load(loadstring))
+                    "SELECT * FROM CARDS WHERE code = ?", code)
+                loadrow = loadstring.fetchone()
+                loaddict = dict(zip(FIELDS, loadrow))
+                card = Card(loaddict=loaddict)
             if cache:
                 self.cache_card(card)
         return card
@@ -113,10 +77,10 @@ class Library(object):
         """
         if cache:
             self.cache_card(card)
-        savestring = self._prepare_save(str(card))
+        savedict = card.save()
         with sqlite3.connect(self.dbname) as carddb:
-            carddb.execute("INSERT INTO CARDS values (?, ?)", (card.code,
-                                                               savestring))
+            carddb.execute("INSERT INTO CARDS VALUES(?, ?, ?, ?, ?)",
+                           [cardict[key] for key in FIELDS])
 
     def connection(self):
         """Connect to the underlying database and return the connection."""
