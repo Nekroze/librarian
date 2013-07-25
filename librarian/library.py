@@ -1,7 +1,7 @@
 """The Library class, an sqlite database of cards."""
 __author__ = 'Taylor "Nekroze" Lawson'
 __email__ = 'nekroze@eturnilnetwork.com'
-
+from functools import partial
 import sqlite3
 from .card import Card
 
@@ -45,30 +45,36 @@ class Library(object):
         with sqlite3.connect(self.dbname) as carddb:
             carddb.execute("CREATE TABLE CARDS(code NUMBER, card STRING)")
 
-    def add_save_hook(self, func):
+    def add_save_hook(self, func, *args, **kwargs):
         """
         Add the given function to the save events.
         functions will be called in the order that they where added.
 
-        Event functions should take and output a string.
+        Event functions can be given any number of arguments when added to the
+        hook and be able to take a savestring keyword argument for the string
+        to be saved to be passed along the event chain. Each event should
+        return a string suitable to be pushed to the next event.
         """
-        self.save_chain.append(func)
+        self.save_chain.append(partial(func, *args, **kwargs))
 
-    def add_load_hook(self, func):
+    def add_load_hook(self, func, *args, **kwargs):
         """
         Add the given function to the load events.
         functions will be called in the order that they where added.
 
-        Event functions should take and output a string.
+        Event functions can be given any number of arguments when added to the
+        hook and be able to take a loadstring keyword argument for the string
+        to be saved to be passed along the event chain. Each event should
+        return a string suitable to be pushed to the next event.
         """
-        self.load_chain.append(func)
+        self.load_chain.append(partial(func, *args, **kwargs))
 
     def _prepare_save(self, savestring):
         """
         Run each save event on the given savestring and return the product.
         """
         for func in self.save_chain:
-            savestring = func(savestring)
+            savestring = func(savestring=savestring)
         return savestring
 
     def _prepare_load(self, loadstring):
@@ -76,7 +82,7 @@ class Library(object):
         Run each load event on the given loadstring and return the product.
         """
         for func in self.load_chain:
-            loadstring = func(loadstring)
+            loadstring = func(loadstring=loadstring)
         return loadstring
 
     def load_card(self, code, cache=True):
