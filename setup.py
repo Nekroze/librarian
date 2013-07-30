@@ -5,7 +5,7 @@ import sys
 import platform
 from setuptools import setup
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 __author__ = 'Taylor "Nekroze" Lawson'
 __email__ = 'nekroze@eturnilnetwork.com'
 SOURCE = 'librarian'
