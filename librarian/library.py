@@ -59,14 +59,22 @@ class Library(object):
 
     Library also allows load and save hooks that allow a list of function to be
     called on each string as it is saved and loaded.
+
+    The ``Library`` constructor can take a ``cardclass`` argument which
+    defaults to ``librarian.card.Card`` and is used to construct a card object
+    when loading. A ``cardclass`` should be a subclass of
+    ``librarian.card.Card`` and be able to take the original ``carddict``
+    constructor argument alone along with providing the original or equal
+    ``Card.load`` and ``Card.save`` methods.
     """
-    def __init__(self, dbname, cachelimit=100):
+    def __init__(self, dbname, cachelimit=100, cardclass=Card):
         self.dbname = dbname
         self.save_chain = []
         self.load_chain = []
         self.cachelimit = cachelimit
         self.card_cache = {}
         self.card_cache_list = []
+        self.cardclass = cardclass
 
     def cached(self, code):
         """Return True if there is a card for the given code in the cache."""
@@ -113,7 +121,7 @@ class Library(object):
                 if not loadrow:
                     return None
                 loaddict = dict(zip(FIELDS, loadrow))
-                card = Card(loaddict=loaddict)
+                card = self.cardclass(loaddict=loaddict)
             if cache:
                 self.cache_card(card)
         return card
