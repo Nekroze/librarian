@@ -54,8 +54,7 @@ def Where_filter_gen(*data):
 
 class Library(object):
     """
-    Library wraps an sqlite3 database that stores card codes and their
-    corrosponding savestrings.
+    Library wraps an sqlite3 database that stores serialized cards.
 
     Library also allows load and save hooks that allow a list of function to be
     called on each string as it is saved and loaded.
