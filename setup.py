@@ -1,8 +1,7 @@
 #!/usr/bin/python
 from setuptools import setup, find_packages
 
-
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 __author__ = 'Taylor "Nekroze" Lawson'
 __email__ = 'nekroze@eturnilnetwork.com'
 SOURCE = 'librarian'
@@ -11,14 +10,13 @@ PROJECTNAME = 'librarian'
 PROJECTSITE = 'nekroze.eturnilnetwork.com'
 PROJECTDESC = 'Python advanced card game library.'
 PROJECTLICENSE = 'MIT'
-PLATFORMS = ['*nix', 'Windows']
+PLATFORMS = ['any']
 
 kwds = {}
 kwds['version'] = __version__
 kwds['description'] = PROJECTDESC
 kwds['long_description'] = open('README.rst').read()
 kwds['license'] = PROJECTLICENSE
-
 
 setup(
     name=PROJECTNAME,
@@ -27,7 +25,7 @@ setup(
     url=PROJECTSITE,
     platforms=PLATFORMS,
     packages=[SOURCE],
-    install_requires = ['six'],
+    install_requires = ['six>=1.3.0'],
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
