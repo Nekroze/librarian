@@ -103,6 +103,7 @@ class Card(object):
         self.info = carddict["info"]
         if isinstance(self.info, text_type):
             self.info = eval(self.info)
+        return self
 
     def __eq__(self, other):
         """Return True if this card's code is the same as the other's code."""
