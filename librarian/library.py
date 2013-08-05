@@ -96,8 +96,8 @@ class Library(object):
     def create_db(self):
         """Create the CARDS table in the sqlite3 database."""
         with sqlite3.connect(self.dbname) as carddb:
-            carddb.execute("""CREATE TABLE CARDS(code STRING, name STRING,
-            abilities STRING, attributes STRING, info STRING)""")
+            carddb.execute("""CREATE TABLE IF NOT EXISTS CARDS(code STRING,
+            name STRING, abilities STRING, attributes STRING, info STRING)""")
 
     def load_card(self, code, cache=True):
         """
