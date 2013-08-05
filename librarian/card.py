@@ -106,13 +106,13 @@ class Card(object):
 
     def __eq__(self, other):
         """Return True if this card's code is the same as the other's code."""
-        return self.code == other.code
+        return isinstance(other, Card) and self.code == other.code
 
     def __neq__(self, other):
         """
         Return True if this card's code is not the same as the other's code.
         """
-        return self.code != other.code
+        return isinstance(other, Card) and self.code != other.code
 
     def __str__(self):
         """
