@@ -142,11 +142,14 @@ class Library(object):
 
     def retreive_all(self):
         """
-        Return a list of all the cards stored in the library database.
+        A generator that iterates over each card in the library database.
+
+        This is best used in for loops as it will only load a card from the
+        library as needed rather then all at once.
         """
         with sqlite3.connect(self.dbname) as carddb:
-            codes = carddb.execute("SELECT code FROM CARDS").fetchall()
-        return [self.load_card(eval(code)) for code in codes]
+            for code in carddb.execute("SELECT code FROM CARDS"):
+                yield self.load_card(eval(code))
 
     def filter_search(self, code=None, name=None, abilities=None,
                       attributes=None, info=None):
