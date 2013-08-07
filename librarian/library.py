@@ -140,7 +140,7 @@ class Library(object):
                            [carddict[key] if isinstance(carddict[key], str)
                             else str(carddict[key]) for key in FIELDS])
 
-    def retreive_all(self):
+    def retrieve_all(self):
         """
         A generator that iterates over each card in the library database.
 
