@@ -148,8 +148,8 @@ class Library(object):
         library as needed rather then all at once.
         """
         with sqlite3.connect(self.dbname) as carddb:
-            for code in carddb.execute("SELECT code FROM CARDS"):
-                yield self.load_card(eval(code))
+            for row in carddb.execute("SELECT code FROM CARDS"):
+                yield self.load_card(row[0])
 
     def filter_search(self, code=None, name=None, abilities=None,
                       attributes=None, info=None):
