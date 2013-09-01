@@ -26,7 +26,7 @@ class Deck(object):
         otherwise just return its code.
 
         If cache is set to True (the default) it will tell the library to cache
-        the returned card for faster future lookups.
+        the returned card for faster future look-ups.
 
         If remove is true then the card will be removed from the deck and
         returned.
@@ -56,6 +56,10 @@ class Deck(object):
         for index in range(number):
             output.append(self.get_card(index, cache, remove))
         return output
+
+    def move_top_cards(self, other, number=1):
+        """Move the top `number` of cards to the top of some `other` deck."""
+        other.cards.append(reversed(self.cards[-number:]))
 
     def contains_card(self, code):
         """Returns true if the given code is in the remaining cards."""
