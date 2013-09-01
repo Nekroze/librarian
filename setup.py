@@ -1,37 +1,70 @@
-#!/usr/bin/python
-from setuptools import setup, find_packages
+#!/usr/bin/env python
 
-__version__ = '0.2.7'
-__author__ = 'Taylor "Nekroze" Lawson'
-__email__ = 'nekroze@eturnilnetwork.com'
-SOURCE = 'librarian'
-TESTDIR = 'test'
-PROJECTNAME = 'librarian'
-PROJECTSITE = 'nekroze.eturnilnetwork.com'
-PROJECTDESC = 'Python advanced card game library.'
-PROJECTLICENSE = 'MIT'
-PLATFORMS = ['any']
+import os
+import sys
+from setuptools.command.test import test as TestCommand
 
-kwds = {}
-kwds['version'] = __version__
-kwds['description'] = PROJECTDESC
-kwds['long_description'] = open('README.rst').read()
-kwds['license'] = PROJECTLICENSE
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
+
+
+if sys.argv[-1] == 'publish':
+    os.system('python setup.py sdist upload')
+    sys.exit()
+
+
+class PyTest(TestCommand):
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+
+    def run_tests(self):
+        import pytest
+        errno = pytest.main(self.test_args)
+        sys.exit(errno)
+
+
+readme = open('README.rst').read()
+doclink = """
+Documentation
+-------------
+
+The full documentation is at http://librarian.rtfd.org."""
+history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 setup(
-    name=PROJECTNAME,
-    author=__author__,
-    author_email=__email__,
-    url=PROJECTSITE,
-    platforms=PLATFORMS,
-    packages=[SOURCE],
-    install_requires = ['six>=1.3.0'],
+    name='librarian',
+    version='0.3.0',
+    description='Python advanced card game library.',
+    long_description=readme + '\n\n' + doclink + '\n\n' + history,
+    author='Taylor "Nekroze" Lawson',
+    author_email='nekroze@eturnilnetwork.com',
+    url='https://github.com/Nekroze/librarian',
+    packages=[
+        'librarian',
+    ],
+    package_dir={'librarian': 'librarian'},
+    include_package_data=True,
+    install_requires=[
+    ],
+    license='MIT',
+    zip_safe=False,
+    keywords='librarian',
     classifiers=[
-        "Development Status :: 4 - Beta",
-        "Intended Audience :: Developers",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
+        'Development Status :: 2 - Alpha',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: Implementation :: PyPy',
         "Topic :: Games/Entertainment"
     ],
-    **kwds
+    tests_require=['pytest>=2.3.5'],
 )

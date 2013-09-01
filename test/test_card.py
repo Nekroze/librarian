@@ -1,7 +1,12 @@
+"""
+Tests for `librarian.card` module.
+"""
+import pytest
 from librarian.card import Card
 
 
-class Test_Card:
+class TestCard(object):
+
     def test_constructor(self):
         card = Card(1, 'Test')
 
