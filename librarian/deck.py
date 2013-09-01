@@ -4,6 +4,7 @@ __email__ = 'nekroze@eturnilnetwork.com'
 import random
 from functools import partial
 
+
 class Deck(object):
     """A collection of possibly recuring cards stored as codes."""
     def __init__(self, library=None, cards=None):
@@ -22,7 +23,7 @@ class Deck(object):
         """
         Retrieve a card any number of cards from the top. Returns a
         ``Card`` object loaded from a library if one is specified otherwise
-        just it will simply return its code. 
+        just it will simply return its code.
 
         If `index` is not set then the top  card will be retrieved.
 
@@ -49,7 +50,7 @@ class Deck(object):
         list in order of top to bottom most card. Uses the decks
         ``.get_card`` and passes along the cache and remove arguments.
         """
-        getter = self.get_card(cache=cache, remove=remove)
+        getter = partial(self.get_card(cache=cache, remove=remove))
         return [getter(index=i) for i in range(number)]
 
     def move_top_cards(self, other, number=1):
