@@ -2,7 +2,7 @@
 __author__ = 'Taylor "Nekroze" Lawson'
 __email__ = 'nekroze@eturnilnetwork.com'
 import random
-
+from functools import partial
 
 class Deck(object):
     """A collection of possibly recuring cards stored as codes."""
@@ -22,7 +22,9 @@ class Deck(object):
         """
         Retrieve a card any number of cards from the top. Returns a
         ``Card`` object loaded from a library if one is specified otherwise
-        just it will simply return its code.
+        just it will simply return its code. 
+
+        If `index` is not set then the top  card will be retrieved.
 
         If cache is set to True (the default) it will tell the library to cache
         the returned card for faster look-ups in the future.
@@ -32,31 +34,23 @@ class Deck(object):
         """
         if len(self.cards) < index:
             return None
-        retreiver = self.cards.pop if remove else self.cards.__getitem__
 
-        if self.library is None:
-            return retreiver(index)
+        retriever = self.cards.pop if remove else self.cards.__getitem__
+        code = retriever(index)
+
+        if self.library:
+            return self.library.load_card(code, cache)
         else:
-            return self.library.load_card(retreiver(index), cache)
+            return code
 
-    def get_top_card(self, cache=True, remove=True):
-        """
-        Return the card on the top of the deck as a ``Librarian.Card`` using
-        the the decks ``.get_card`` method and passes along cache and remove
-        arguments.
-        """
-        return self.get_card(0, cache, remove)
-
-    def get_top_cards(self, number=1, cache=True, remove=True):
+    def top_cards(self, number=1, cache=True, remove=True):
         """
         Retrieve the top number of cards as ``Librarian.Card`` objects in a
         list in order of top to bottom most card. Uses the decks
         ``.get_card`` and passes along the cache and remove arguments.
         """
-        output = []
-        for index in range(number):
-            output.append(self.get_card(index, cache, remove))
-        return output
+        getter = self.get_card(cache=cache, remove=remove)
+        return [getter(index=i) for i in range(number)]
 
     def move_top_cards(self, other, number=1):
         """
@@ -72,19 +66,37 @@ class Deck(object):
 
     def contians_attribute(self, attribute):
         """
-        Returns how many remaining cards in the deck have the specified
-        attribute.
+        Returns how many cards in the deck have the specified attribute.
 
         This method requires a library to be stored in the deck instance and
-        will return None if there is no library.
+        will return `None` if there is no library.
         """
         if self.library is None:
             return 0
 
-        lib = self.library
+        load = self.library.load_card
         matches = 0
         for code in self.cards:
-            card = lib.load_card(code)
+            card = load(code)
             if card.has_attribute(attribute):
+                matches += 1
+        return matches
+
+    def contains_info(self, key, value):
+        """
+        Returns how many cards in the deck have the specified value under the
+        specified key in their info data.
+
+        This method requires a library to be stored in the deck instance and
+        will return `None` if there is no library.
+        """
+        if self.library is None:
+            return 0
+
+        load = self.library.load_card
+        matches = 0
+        for code in self.cards:
+            card = load(code)
+            if card.get_info(key) == value:
                 matches += 1
         return matches
