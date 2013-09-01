@@ -1,9 +1,7 @@
 """Generic Card Class."""
 __author__ = 'Taylor "Nekroze" Lawson'
 __email__ = 'nekroze@eturnilnetwork.com'
-
 import random
-from .card import Card
 
 
 class Deck(object):
@@ -63,7 +61,7 @@ class Deck(object):
     def move_top_cards(self, other, number=1):
         """
         Move the top `number` of cards to the top of some `other` deck.
-        
+
         By default only one card will be moved if `number` is not specified.
         """
         other.cards.append(reversed(self.cards[-number:]))
@@ -74,7 +72,7 @@ class Deck(object):
 
     def contians_attribute(self, attribute):
         """
-        Returns how many remaining cards in the deck have the specified 
+        Returns how many remaining cards in the deck have the specified
         attribute.
 
         This method requires a library to be stored in the deck instance and
