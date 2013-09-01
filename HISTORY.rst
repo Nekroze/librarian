@@ -3,7 +3,7 @@
 History
 -------
 
-0.3.0 (2013-07-10)
+0.3.0 (TBD)
 ++++++++++++++++++
 
-* First release on PyPI.
+* First re-release on PyPI.
