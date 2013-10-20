@@ -9,7 +9,7 @@ class Card(object):
     The card stores general information about the card.
      * code: the unique identifier for this card.
      * name: name of this card to be displayed.
-     * abilities: dict of phase ids containing a list of action descriptors.      test
+     * abilities: dict of phase ids containing a list of action descriptors.
      * attributes: list of special details this card has.
      * info: dict of any information you would like.
 
