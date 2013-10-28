@@ -18,4 +18,6 @@ Python advanced card game library.
 Features
 --------
 
-* TODO
+* Sqlite based card storage database
+* Easy de/re-serialization of card objects
+* Complex filtering methods for card databases
